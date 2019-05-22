@@ -211,6 +211,26 @@
       
     </div>
     
+      <div id="测试" style="margin: 4rem 2px -1rem"></div>
+<script async>
+  (function(){
+    let playerTimer = setInterval(function(){
+      if(!window.APlayer){
+        return
+      }
+
+      new APlayer({
+        container: document.getElementById('测试'),
+        theme: '#e96900',
+        listFolded: false,
+        audio: [{"name":"国际歌","artist":"唐朝乐队","url":"//music.163.com/song/media/outer/url?id=130133.mp3","cover":"//p1.music.126.net/AUfXMljLBgB3PBV731IzRg==/109951162857118370.jpg?param=130y130"}]
+      });
+      
+      clearInterval(playerTimer)
+    }, 10);
+  })()
+</script>
+    
     <!-- 文章简介 -->
     <div class="article-content">
       <div class="markdown-body article-content--inner" v-html="mdToHtml(psg.summary)">
