@@ -8,12 +8,12 @@
   
   
   
-  <title>linux指令大全 | 一心梦夏</title>
+  <title>SpringBoot所数据源事务管理器 | 一心梦夏</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="工作笔记,服务器篇,">
+    <meta name="keywords" content="工作笔记,微服务篇,">
   
 
   <script>
@@ -191,12 +191,12 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>linux指令大全</span>
+    <span>SpringBoot所数据源事务管理器</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-05-23
+      2019-05-27
     </span>
     
       <span>
@@ -208,7 +208,7 @@
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="linux指令大全"></span>
+        浏览 : <span class="article-timer" data-identity="SpringBoot多数据源事务管理器（非分布式应用）"></span>
       </span>
     
   </div>
@@ -217,30 +217,76 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <p><img src="https://raw.githubusercontent.com/lautrix/image_repo/master/QQ%E6%88%AA%E5%9B%BE20190523141708.png" alt="Terminal"></p>
-<ol>
-<li>lsof -i:port  查看指定端口占用情况。比如查看8080端口占用情况，lsof -i:8080</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># lsof -i:8080</span><br><span class="line">COMMAND   PID   USER   FD   TYPE  DEVICE SIZE NODE NAME</span><br><span class="line">java    11182 tomcat   47u  IPv4 1470572       TCP *:webcache (LISTEN)</span><br></pre></td></tr></table></figure>
+      <h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>版本号</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JDK</td>
+<td>11.0.2</td>
+<td></td>
+</tr>
+<tr>
+<td>SpringBoot</td>
+<td>2.1.5.RELEASE</td>
+<td></td>
+</tr>
+<tr>
+<td>Oracle</td>
+<td>11G</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="主要代码"><a href="#主要代码" class="headerlink" title="主要代码"></a>主要代码</h3><h5 id="多数据源配置规则"><a href="#多数据源配置规则" class="headerlink" title="多数据源配置规则"></a>多数据源配置规则</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  # 数据库配置</span><br><span class="line">  datasource:</span><br><span class="line">    dynamic:</span><br><span class="line">      datasource:</span><br><span class="line">        # 系统库</span><br><span class="line">        mg:</span><br><span class="line">          username: username_mg</span><br><span class="line">          password: password_mg</span><br><span class="line">          driver-class-name: oracle.jdbc.OracleDriver</span><br><span class="line">          jdbc-url: jdbc:oracle:thin:<span class="meta">@ip</span>:port/database_name</span><br><span class="line">        # 业务库</span><br><span class="line">        dm:</span><br><span class="line">          username: username_dm</span><br><span class="line">          password: username_dm</span><br><span class="line">          driver-class-name: oracle.jdbc.OracleDriver</span><br><span class="line">          jdbc-url: jdbc:oracle:thin:<span class="meta">@ip</span>:port/database_name</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>netstat -tunlp，用于查看全部在运行端口号的占用情况，如查看8000端口的情况，netstat -tunlp |grep 8000</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># netstat -tunlp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State       PID/Program name   </span><br><span class="line">tcp        0      0 127.0.0.1:2208              0.0.0.0:*                   LISTEN      4869/hpiod          </span><br><span class="line">tcp        0      0 127.0.0.1:8005              0.0.0.0:*                   LISTEN      11182/java          </span><br><span class="line">tcp        0      0 127.0.0.1:199               0.0.0.0:*                   LISTEN      4885/snmpd          </span><br><span class="line">tcp        0      0 0.0.0.0:8009                0.0.0.0:*                   LISTEN      11182/java</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>当前开发过程所使用的多源数据库为Oracle数据库，其他数据库配置类同，同样适用</li>
+<li>配置数据库URL必须使用”jdbc-url”字段，其他字段不识别</li>
+<li>多源数据库命名可自定，但不可包含下划线，如：“mg”是正确命名方式，“oracle_mg”是错误命名方式</li>
+</ul>
+<h5 id="事务管理器类"><a href="#事务管理器类" class="headerlink" title="事务管理器类"></a>事务管理器类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@MapperScan</span>(basePackageClasses = &#123;AuthUserMapper.class, TokenLogMapper.class&#125;, sqlSessionFactoryRef = <span class="string">"mgSqlSessionFactory"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceConfigMG</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 配置oracle-mg的数据库</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@Primary</span> 指定默认数据源，非默认数据源则不添加此注解</span></span><br><span class="line"><span class="comment">   * “prefix”的值中不能包含下划线</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Bean</span>(name = <span class="string">"mgDataSource"</span>)</span><br><span class="line">  <span class="meta">@Primary</span></span><br><span class="line">  <span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.datasource.dynamic.datasource.mg"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> DataSource <span class="title">mgDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> DataSourceBuilder.create().build();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * SQL会话工厂</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> dataSource</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Bean</span>(name = <span class="string">"mgSqlSessionFactory"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">mgSqlSessionFactory</span><span class="params">(@Qualifier(<span class="string">"mgDataSource"</span>)</span> DataSource dataSource) <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"></span><br><span class="line">    SqlSessionFactoryBean sqlSessionFactoryBean = <span class="keyword">new</span> SqlSessionFactoryBean();</span><br><span class="line">    sqlSessionFactoryBean.setDataSource(dataSource);</span><br><span class="line">    <span class="keyword">return</span> sqlSessionFactoryBean.getObject();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * oracle_mg事务管理</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> dataSource</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Bean</span>(name = <span class="string">"mgTransactionManager"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> DataSourceTransactionManager <span class="title">mgTransactionManager</span><span class="params">(@Qualifier(<span class="string">"mgDataSource"</span>)</span> DataSource dataSource)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DataSourceTransactionManager(dataSource);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span>(name = <span class="string">"mgSqlSessionTemplate"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> SqlSessionTemplate <span class="title">mgSqlSessionTemplate</span><span class="params">(@Qualifier(<span class="string">"mgSqlSessionFactory"</span>)</span> SqlSessionFactory sqlSessionFactory)<span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SqlSessionTemplate(sqlSessionFactory);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>netstat -tunlp |grep port 查看指定端口号占用情况，如查看8080端口，netstat -tunlp |grep 8080</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># netstat -tunlp |grep 8080</span><br><span class="line">tcp        0      0 0.0.0.0:8080                0.0.0.0:*                   LISTEN      11182/java</span><br></pre></td></tr></table></figure>
+<h6 id="注解及关键字说明"><a href="#注解及关键字说明" class="headerlink" title="注解及关键字说明"></a>注解及关键字说明</h6><table>
+<thead>
+<tr>
+<th>注解或关键字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@MapperScan（）</td>
+<td>指定当前事务管理器所扫描的数据源Mapper。basePackages用于指定包Mapper包路径，<strong>建议不同数据源Mapper放在不同包内</strong>，方便配置。basePackageClasses用于指定具体Mapper类，适用于不同数据源Mapper文件放在同一个包内的情况。</td>
+</tr>
+<tr>
+<td>@Primary</td>
+<td>指定当前事务管理器的数据源为默认数据源。非默认数据源则不需要配置此注解，同一项目内，必须包含唯一默认数据源。</td>
+</tr>
+<tr>
+<td>@ConfigurationProperties</td>
+<td>Prefix用于指定具体数据源，和配置文件中数据库配置层级一致，一个事务管理器仅能指定一个数据源。且数据源昵称不能包含下划线。</td>
+</tr>
+</tbody></table>
+<p><strong>以上仅为多源数据事务管理器中的一个（默认数据源），其他数据源也许要进行同样配置。</strong></p>
+<h5 id="Service类使用事务管理器"><a href="#Service类使用事务管理器" class="headerlink" title="Service类使用事务管理器"></a>Service类使用事务管理器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span>(transactionManager = <span class="string">"mgTransactionManager"</span>, rollbackFor = Exception.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveAttention</span><span class="params">(Map&lt;String, Object&gt; paramMap)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        </span><br><span class="line">        artistAttentionMapper.delAttention(paramMap);</span><br><span class="line">        </span><br><span class="line">        artistAttentionMapper.addAttention(paramMap);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>​     参数说明：</p>
-<blockquote>
-<p>-t (tcp) 仅显示tcp相关选项<br>-u (udp)仅显示udp相关选项<br>-n 拒绝显示别名，能显示数字的全部转化为数字<br>-l 仅列出在Listen(监听)的服务状态<br>-p 显示建立相关链接的程序名</p>
-</blockquote>
-<ol start="4">
-<li>使用java -jar demo.jar命令启动项目时，指定java版本</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># echo $JAVA_HOME</span><br><span class="line">/usr/jdk/jdk1.8.0_191</span><br><span class="line"># /usr/jdk/jdk1.8.0_191/bin/java -jar demo.jar</span><br></pre></td></tr></table></figure>
+<h6 id="注解及关键字说明-1"><a href="#注解及关键字说明-1" class="headerlink" title="注解及关键字说明"></a>注解及关键字说明</h6><table>
+<thead>
+<tr>
+<th>注解或关键字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Transactional</td>
+<td>事务注入。transactionManager用于指定事务管理器的名字。rollbackFor用于指定事务回滚的条件。</td>
+</tr>
+</tbody></table>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上为单体应用中关于事务管理器的配置方法，不适用于分布式系统中的事务配置。</p>
     </div>
   </div>
   
@@ -251,7 +297,7 @@
         
           本文作者 : 一心梦夏 <br>
         
-        原文链接 : <a href>http://lautrix.github.io/2019/05/23/linux指令大全/</a><br>
+        原文链接 : <a href>http://lautrix.github.io/2019/05/27/SpringBoot多数据源事务管理器（非分布式应用）/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -328,15 +374,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/05/22/开篇/" target="_self">开篇</a>
+        <a href="/2019/05/23/linux指令大全/" target="_self">linux指令大全</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/05/27/SpringBoot多数据源事务管理器（非分布式应用）/" target="_self">SpringBoot所数据源事务管理器</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
