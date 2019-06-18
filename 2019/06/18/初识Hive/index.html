@@ -217,8 +217,9 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h4 id="Hive简介"><a href="#Hive简介" class="headerlink" title="Hive简介"></a>Hive简介</h4><pre><code>Hive是一个数据仓库基础工具在Hadoop中用来处理结构化数据。它架构在Hadoop之上，总归为大数据，并使得查询和分析方便。并提供简单的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。</code></pre><p>​        最初，Hive是由Facebook开发，后来由Apache软件基金会开发，并作为进一步将它作为名义下Apache Hive为一个开源项目。Hive 没有专门的数据格式。 Hive 可以很好的工作在 Thrift 之上，控制分隔符，也允许用户指定数据格式。Hive不适用于在线事务处理。 它最适用于传统的数据仓库任务。</p>
-<p>​       Hive 构建在基于静态批处理的Hadoop 之上，Hadoop 通常都有较高的延迟并且在作业提交和调度的时候需要大量的开销。因此，Hive 并不能够在大规模数据集上实现低延迟快速的查询，例如，Hive 在几百MB 的数据集上执行查询一般有分钟级的时间延迟。因此，<br>​      Hive 并不适合那些需要低延迟的应用，例如，联机事务处理（OLTP）。Hive 查询操作过程严格遵守Hadoop MapReduce 的作业执行模型，Hive 将用户的HiveQL 语句通过解释器转换为MapReduce 作业提交到Hadoop 集群上，Hadoop 监控作业执行过程，然后返回作业执行结果给用户。Hive 并非为联机事务处理而设计，Hive 并不提供实时的查询和基于行级的数据更新操作。Hive 的最佳使用场合是大数据集的批处理作业，例如，网络日志分析。</p>
+      <h4 id="Hive简介"><a href="#Hive简介" class="headerlink" title="Hive简介"></a>Hive简介</h4><p>Hive是一个数据仓库基础工具在Hadoop中用来处理结构化数据。它架构在Hadoop之上，总归为大数据，并使得查询和分析方便。并提供简单的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。</p>
+<p>最初，Hive是由Facebook开发，后来由Apache软件基金会开发，并作为进一步将它作为名义下Apache Hive为一个开源项目。Hive 没有专门的数据格式。 Hive 可以很好的工作在 Thrift 之上，控制分隔符，也允许用户指定数据格式。Hive不适用于在线事务处理。 它最适用于传统的数据仓库任务。</p>
+<p>Hive 构建在基于静态批处理的Hadoop 之上，Hadoop 通常都有较高的延迟并且在作业提交和调度的时候需要大量的开销。因此，Hive 并不能够在大规模数据集上实现低延迟快速的查询，例如，Hive 在几百MB 的数据集上执行查询一般有分钟级的时间延迟。因此，<br>Hive 并不适合那些需要低延迟的应用，例如，联机事务处理（OLTP）。Hive 查询操作过程严格遵守Hadoop MapReduce 的作业执行模型，Hive 将用户的HiveQL 语句通过解释器转换为MapReduce 作业提交到Hadoop 集群上，Hadoop 监控作业执行过程，然后返回作业执行结果给用户。Hive 并非为联机事务处理而设计，Hive 并不提供实时的查询和基于行级的数据更新操作。Hive 的最佳使用场合是大数据集的批处理作业，例如，网络日志分析。</p>
 <h4 id="Hive的特点"><a href="#Hive的特点" class="headerlink" title="Hive的特点"></a>Hive的特点</h4><ol>
 <li><p>通过SQL轻松访问数据的工具，从而实现数据仓库任务（如提取/转换/加载（ETL），报告和数据分析）。</p>
 </li>
@@ -242,10 +243,10 @@
 <li>解释器、编辑器、优化器完成HQL查询语句从词法分析、语法分析、编译、优化以及查询计划的生成。生成的查询计划存储在HDFS中，并在随后有MapReduce调用执行。</li>
 <li>Hive的数据存储在HDFS中，大部分的查询、计算由MapReduce完成。</li>
 </ol>
-<h5 id="客户端和客户端组件"><a href="#客户端和客户端组件" class="headerlink" title="客户端和客户端组件"></a>客户端和客户端组件</h5><p>​        由上图可知，hadoop和mapreduce是hive架构的根基。Hive架构包括如下组件：CLI（command line interface）、JDBC/ODBC、Thrift Server、WEB GUI、metastore和Driver(Complier、Optimizer和Executor)，这些组件我可以分为两大类：服务端组件和客户端组件。</p>
-<h6 id="服务端组件"><a href="#服务端组件" class="headerlink" title="服务端组件"></a>服务端组件</h6><p>​        Driver组件：该组件包括Complier、Optimizer和Executor，它的作用是将我们写的HiveQL（类SQL）语句进行解析、编译优化，生成执行计划，然后调用底层的mapreduce计算框架。<br>​        Metastore组件：元数据服务组件，这个组件存储hive的元数据，hive的元数据存储在关系数据库里，hive支持的关系数据库有derby、mysql。元数据对于hive十分重要，因此hive支持把metastore服务独立出来，安装到远程的服务器集群里，从而解耦hive服务和metastore服务，保证hive运行的健壮性，这个方面的知识，我会在后面的metastore小节里做详细的讲解。<br>​        Thrift服务：thrift是facebook开发的一个软件框架，它用来进行可扩展且跨语言的服务的开发，hive集成了该服务，能让不同的编程语言调用hive的接口。</p>
-<h6 id="客户端组件"><a href="#客户端组件" class="headerlink" title="客户端组件"></a>客户端组件</h6><p>​        CLI：command line interface，命令行接口。<br>​        Thrift客户端：上面的架构图里没有写上Thrift客户端，但是hive架构的许多客户端接口是建立在thrift客户端之上，包括JDBC和ODBC接口。<br>​        WEBGUI：hive客户端提供了一种通过网页的方式访问hive所提供的服务。这个接口对应hive的hwi组件（hive web interface），使用前要启动hwi服务。</p>
-<h6 id="Hive的metastore组件"><a href="#Hive的metastore组件" class="headerlink" title="Hive的metastore组件"></a>Hive的metastore组件</h6><p>​        Hive的metastore组件是hive元数据集中存放地。Metastore组件包括两个部分：metastore服务和后台数据的存储。后台数据存储的介质就是关系数据库，例如hive默认的嵌入式磁盘数据库derby，还有mysql数据库。Metastore服务是建立在后台数据存储介质之上，并且可以和hive服务进行交互的服务组件，默认情况下，        metastore服务和hive服务是安装在一起的，运行在同一个进程当中。我也可以把metastore服务从hive服务里剥离出来，metastore独立安装在一个集群里，hive远程调用metastore服务，这样我们可以把元数据这一层放到防火墙之后，客户端访问hive服务，就可以连接到元数据这一层，从而提供了更好的管理性和安全保障。使用远程的metastore服务，可以让metastore服务和hive服务运行在不同的进程里，这样也保证了hive的稳定性，提升了hive服务的效率。</p>
+<h5 id="客户端和客户端组件"><a href="#客户端和客户端组件" class="headerlink" title="客户端和客户端组件"></a>客户端和客户端组件</h5><p>由上图可知，hadoop和mapreduce是hive架构的根基。Hive架构包括如下组件：CLI（command line interface）、JDBC/ODBC、Thrift Server、WEB GUI、metastore和Driver(Complier、Optimizer和Executor)，这些组件我可以分为两大类：服务端组件和客户端组件。</p>
+<h6 id="服务端组件"><a href="#服务端组件" class="headerlink" title="服务端组件"></a>服务端组件</h6><p>Driver组件：该组件包括Complier、Optimizer和Executor，它的作用是将我们写的HiveQL（类SQL）语句进行解析、编译优化，生成执行计划，然后调用底层的mapreduce计算框架。<br>Metastore组件：元数据服务组件，这个组件存储hive的元数据，hive的元数据存储在关系数据库里，hive支持的关系数据库有derby、mysql。元数据对于hive十分重要，因此hive支持把metastore服务独立出来，安装到远程的服务器集群里，从而解耦hive服务和metastore服务，保证hive运行的健壮性，这个方面的知识，我会在后面的metastore小节里做详细的讲解。<br>Thrift服务：thrift是facebook开发的一个软件框架，它用来进行可扩展且跨语言的服务的开发，hive集成了该服务，能让不同的编程语言调用hive的接口。</p>
+<h6 id="客户端组件"><a href="#客户端组件" class="headerlink" title="客户端组件"></a>客户端组件</h6><p>CLI：command line interface，命令行接口。<br>Thrift客户端：上面的架构图里没有写上Thrift客户端，但是hive架构的许多客户端接口是建立在thrift客户端之上，包括JDBC和ODBC接口。<br>WEBGUI：hive客户端提供了一种通过网页的方式访问hive所提供的服务。这个接口对应hive的hwi组件（hive web interface），使用前要启动hwi服务。</p>
+<h6 id="Hive的metastore组件"><a href="#Hive的metastore组件" class="headerlink" title="Hive的metastore组件"></a>Hive的metastore组件</h6><p>Hive的metastore组件是hive元数据集中存放地。Metastore组件包括两个部分：metastore服务和后台数据的存储。后台数据存储的介质就是关系数据库，例如hive默认的嵌入式磁盘数据库derby，还有mysql数据库。Metastore服务是建立在后台数据存储介质之上，并且可以和hive服务进行交互的服务组件，默认情况下，        metastore服务和hive服务是安装在一起的，运行在同一个进程当中。我也可以把metastore服务从hive服务里剥离出来，metastore独立安装在一个集群里，hive远程调用metastore服务，这样我们可以把元数据这一层放到防火墙之后，客户端访问hive服务，就可以连接到元数据这一层，从而提供了更好的管理性和安全保障。使用远程的metastore服务，可以让metastore服务和hive服务运行在不同的进程里，这样也保证了hive的稳定性，提升了hive服务的效率。</p>
 <h6 id="连接到数据库的模式："><a href="#连接到数据库的模式：" class="headerlink" title="连接到数据库的模式："></a>连接到数据库的模式：</h6><p>有三种模式可以连接到数据库：</p>
 <ol>
 <li>单用户模式。此模式连接到一个In-memory 的数据库Derby，一般用于Unit Test。</li>
@@ -280,7 +281,8 @@
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create view test_view as select * from <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="Hive和数据库的异同"><a href="#Hive和数据库的异同" class="headerlink" title="Hive和数据库的异同"></a>Hive和数据库的异同</h4><pre><code>由于Hive采用了SQL的查询语言HQL，因此很容易将Hive理解为数据库。其实从结构上来看，Hive和数据库除了拥有类似的查询语言，再无类似之处。数据库可以用在Online的应用中，但是Hive是为数据仓库而设计的，清楚这一点，有助于从应用角度理解Hive的特性。Hive和数据库的比较如下表：</code></pre><p><img src="https://raw.githubusercontent.com/lautrix/image_repo/master/Hive%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BC%82%E5%90%8C.png" alt="Hive和数据库的异同"></p>
+<h4 id="Hive和数据库的异同"><a href="#Hive和数据库的异同" class="headerlink" title="Hive和数据库的异同"></a>Hive和数据库的异同</h4><p>由于Hive采用了SQL的查询语言HQL，因此很容易将Hive理解为数据库。其实从结构上来看，Hive和数据库除了拥有类似的查询语言，再无类似之处。数据库可以用在Online的应用中，但是Hive是为数据仓库而设计的，清楚这一点，有助于从应用角度理解Hive的特性。Hive和数据库的比较如下表：</p>
+<p><img src="https://raw.githubusercontent.com/lautrix/image_repo/master/Hive%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BC%82%E5%90%8C.png" alt="Hive和数据库的异同"></p>
 <p>从上如可以看到它们之间的差别。</p>
 <ol>
 <li>查询语言。由于 SQL 被广泛的应用在数据仓库中，因此专门针对Hive的特性设计了类SQL的查询语言HQL。熟悉SQL开发的开发者可以很方便的使用Hive进行开发。</li>
@@ -309,7 +311,7 @@
 <li>Send Results。驱动程序将结果发送给Hive接口。</li>
 </ol>
 <p>执行过程就是：</p>
-<p>​        HiveQL通过CLI/web UI或者thrift 、 odbc 或 jdbc接口的外部接口提交，经过complier编译器，运用Metastore中的元数据进行类型检测和语法分析，生成一个逻辑方案(logical plan),然后通过简单的优化处理，产生一个以有向无环图DAG数据结构形式展现的map-reduce任务。</p>
+<p>HiveQL通过CLI/web UI或者thrift 、 odbc 或 jdbc接口的外部接口提交，经过complier编译器，运用Metastore中的元数据进行类型检测和语法分析，生成一个逻辑方案(logical plan),然后通过简单的优化处理，产生一个以有向无环图DAG数据结构形式展现的map-reduce任务。</p>
 <p>Hive构建在Hadoop之上，Hive的执行原理：</p>
 <ol>
 <li>HQL中对查询语句的解释、优化、生成查询计划是由Hive完成的</li>
